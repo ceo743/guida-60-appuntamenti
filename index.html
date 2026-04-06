@@ -179,10 +179,9 @@ function submitForm(e){
     method:'POST',
     body:data
   }).catch(function(){});
-  // Show success after short delay regardless
+  // Redirect after short delay
   setTimeout(function(){
-    document.getElementById('formWrap').classList.add('hidden');
-    document.getElementById('successMsg').classList.add('active');
+    window.location.href='https://automazioni.davidecaiazzo.it/';
   },1200);
 }
 </script>
