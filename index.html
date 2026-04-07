@@ -46,6 +46,13 @@
     .success-msg.active{display:block}
     .form-wrap.hidden{display:none}
 
+    /* ===== CONFIRM MODAL ===== */
+    .confirm-modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:24px}
+    .confirm-modal.open{display:flex}
+    .confirm-modal-box{background:linear-gradient(160deg,#12151c 0%,#0a0d12 100%);border:1px solid rgba(212,175,55,0.12);border-radius:24px;max-width:520px;width:100%;padding:36px 32px 28px;position:relative;box-shadow:0 32px 100px rgba(0,0,0,0.7);animation:slideUp 0.4s cubic-bezier(0.16,1,0.3,1)}
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
     @media(max-width:768px){
       .card{padding:32px 20px;margin:0 16px}
       .btn-gold{padding:16px 36px}
@@ -110,6 +117,22 @@
 
   <p style="margin-top:24px;font-size:12px;color:rgba(255,255,255,0.15)">DC Academy S.r.l. &mdash; P.IVA 16916171009</p>
 </main>
+
+<!-- ===== CONFIRM MODAL (popup post-form) ===== -->
+<div class="confirm-modal" id="confirmModal">
+  <div class="confirm-modal-box">
+    <div style="text-align:center">
+      <div style="width:64px;height:64px;background:linear-gradient(135deg,#BF953F,#D4AF37);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 30px rgba(212,175,55,0.25)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,28px);font-weight:800;margin-bottom:12px"><span class="gold">Guida inviata!</span></h2>
+      <p style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:8px">Controlla la tua casella email, la guida sta arrivando.</p>
+      <p style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:28px">Non la trovi? <strong style="color:rgba(255,255,255,0.8)">Controlla la cartella Spam o Promozioni</strong> e spostala nella posta in arrivo.</p>
+      <a href="https://automazioni.davidecaiazzo.it/" class="btn-gold" style="font-size:12px;padding:18px 40px"><span>SCOPRI COME AUTOMATIZZIAMO TUTTO &rarr;</span></a>
+      <p style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:16px">Verrai reindirizzato automaticamente tra <span id="countdownSec">10</span> secondi</p>
+    </div>
+  </div>
+</div>
 
 <script>
 // ===== PARTICLE CANVAS =====
@@ -179,10 +202,21 @@ function submitForm(e){
     method:'POST',
     body:data
   }).catch(function(){});
-  // Redirect after short delay
+  // Show confirm modal
   setTimeout(function(){
-    window.location.href='https://automazioni.davidecaiazzo.it/';
-  },1200);
+    document.getElementById('confirmModal').classList.add('open');
+    // Countdown + auto-redirect
+    var sec = 10;
+    var countEl = document.getElementById('countdownSec');
+    var timer = setInterval(function(){
+      sec--;
+      countEl.textContent = sec;
+      if(sec <= 0){
+        clearInterval(timer);
+        window.location.href = 'https://automazioni.davidecaiazzo.it/';
+      }
+    }, 1000);
+  }, 800);
 }
 </script>
 <!-- DC Academy Chatbot Widget -->
